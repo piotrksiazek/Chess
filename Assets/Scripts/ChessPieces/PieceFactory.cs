@@ -7,6 +7,14 @@ public class PieceFactory : MonoBehaviour
     private const int _z = -1;
     public static GameObject Create(GameObject go, int x, int y)
     {
-        return Instantiate(go, new Vector3(x, y, _z), Quaternion.identity);
+        Vector3 translatedUnits = TranslateMatrixUnitsToWorldUnits(x, y);
+        return Instantiate(go, translatedUnits, Quaternion.identity);
+    }
+
+    public static Vector3 TranslateMatrixUnitsToWorldUnits(int matrixX, int matrixY)
+    {
+        float worldX = -3.5f + matrixX;
+        float worldY = 3.5f - matrixY;
+        return new Vector3(worldX, worldY, _z);
     }
 }
