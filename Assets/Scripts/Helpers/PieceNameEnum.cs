@@ -3,6 +3,5 @@ using System.Collections.Generic;
 
 namespace Chess
 {
-    public enum isColor { Black, White }
+    public enum PieceName { Pawn, King, Queen, Rook, Bishop, Knight }
 }
-

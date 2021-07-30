@@ -6,7 +6,18 @@ public class GameController : MonoBehaviour
 {
     //Pieces prefabs
     [SerializeField]
-    private GameObject b_pawn, w_pawn, b_rook, w_rook, b_queen, w_queen, b_knight, w_knight, b_king, w_king, b_bishop, w_bishop;
+    private GameObject b_pawn = null,
+                       w_pawn = null,
+                       b_rook = null,
+                       w_rook = null,
+                       b_queen = null,
+                       w_queen = null,
+                       b_knight = null,
+                       w_knight = null,
+                       b_king = null,
+                       w_king = null,
+                       b_bishop = null,
+                       w_bishop = null;
 
     [SerializeField]
     private List<GameObject> allPieces; 
@@ -14,17 +25,16 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        PieceFactory.Create(b_pawn, 0, 0);
-        PieceFactory.Create(b_pawn, 1, 0);
-        PieceFactory.Create(b_pawn, 1, 1);
+        PopulatePieces();
     }
 
-    //Adds all piece game objects to scene
-    //void PopulatePieces()
-    //{
-    //    for(int i=0; i<32; i++)
-    //    {
-    //        allPieces.Add(PieceFactory.Create(b_pawn, i, i));
-    //    }
-    //}
+    //later put that in PieceFactory
+    void PopulatePieces()
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            PieceFactory.Create(b_pawn, i, 1);
+            PieceFactory.Create(w_pawn, i, 6);
+        }
+    }
 }
