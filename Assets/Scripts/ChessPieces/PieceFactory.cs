@@ -25,8 +25,9 @@ public class PieceFactory : MonoBehaviour
 
     private const int _z = -1;
 
-    public  void PopulateChessBoard()
+    public List<GameObject> PopulateChessBoard()
     {
+        List<GameObject> pieces = new List<GameObject>();
         for (int y = 0; y < 8; y++)
         {
             for (int x = 0; x < 8; x++)
@@ -40,34 +41,40 @@ public class PieceFactory : MonoBehaviour
 
         for (int i = 0; i < 8; i++)
         {
-            Create(b_pawn, i, 1);
-            Create(w_pawn, i, 6);
+            pieces.Add(Create(b_pawn, i, 1));
+            pieces.Add(Create(w_pawn, i, 6));
         }
 
-        Create(b_king, 4, 0);
-        Create(w_king, 4, 7);
+        pieces.Add(Create(b_king, 4, 0));
+        pieces.Add(Create(w_king, 4, 7));
 
-        Create(b_queen, 3, 0);
-        Create(w_queen, 3, 7);
+        pieces.Add(Create(b_queen, 3, 0));
+        pieces.Add(Create(w_queen, 3, 7));
 
-        Create(b_rook, 0, 0);
-        Create(b_rook, 7, 0);
-        Create(w_rook, 0, 7);
-        Create(w_rook, 7, 7);
+        pieces.Add(Create(b_rook, 0, 0));
+        pieces.Add(Create(b_rook, 7, 0));
+        pieces.Add(Create(w_rook, 0, 7));
+        pieces.Add(Create(w_rook, 7, 7));
 
-        Create(b_bishop, 2, 0);
-        Create(b_bishop, 5, 0);
-        Create(w_bishop, 2, 7);
-        Create(w_bishop, 5, 7);
+        pieces.Add(Create(b_bishop, 2, 0));
+        pieces.Add(Create(b_bishop, 5, 0));
+        pieces.Add(Create(w_bishop, 2, 7));
+        pieces.Add(Create(w_bishop, 5, 7));
 
-        Create(b_knight, 1, 0);
-        Create(b_knight, 6, 0);
-        Create(w_knight, 1, 7);
-        Create(w_knight, 6, 7);
+        pieces.Add(Create(b_knight, 1, 0));
+        pieces.Add(Create(b_knight, 6, 0));
+        pieces.Add(Create(w_knight, 1, 7));
+        pieces.Add(Create(w_knight, 6, 7));
+
+        return pieces;
     }
+
     private GameObject Create(GameObject go, int x, int y)
     {
         Vector3 translatedUnits = TranslateMatrixUnitsToWorldUnits(x, y);
+        Piece piece = go.GetComponent<Piece>();
+        piece.MatrixX = x;
+        piece.MatrixY = y;
         return Instantiate(go, translatedUnits, Quaternion.identity);
     }
 
