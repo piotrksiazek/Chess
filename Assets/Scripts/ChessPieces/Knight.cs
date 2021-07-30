@@ -6,7 +6,18 @@ public class Knight : Piece
 {
     public override List<Coordinates> GetPossibleMoves()
     {
-        throw new System.NotImplementedException();
+        var possibleMoves = new List<Coordinates>();
+
+        possibleMoves.Add(new Coordinates(MatrixX - 1, MatrixY - 2));
+        possibleMoves.Add(new Coordinates(MatrixX + 1, MatrixY - 2));
+        possibleMoves.Add(new Coordinates(MatrixX + 2, MatrixY - 1));
+        possibleMoves.Add(new Coordinates(MatrixX + 2, MatrixY + 1));
+        possibleMoves.Add(new Coordinates(MatrixX + 1, MatrixY + 2));
+        possibleMoves.Add(new Coordinates(MatrixX - 1, MatrixY + 2));
+        possibleMoves.Add(new Coordinates(MatrixX - 2, MatrixY + 1));
+        possibleMoves.Add(new Coordinates(MatrixX - 2, MatrixY - 1));
+
+        return BoundaryFilteredAll(possibleMoves);
     }
 
     // Start is called before the first frame update
