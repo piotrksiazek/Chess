@@ -24,10 +24,10 @@ public class PieceFactory : MonoBehaviour
     private const float _upperRightCornerY = -_upperLeftCornerX;
 
     private const int _z = -1;
-
-    public List<GameObject> PopulateChessBoard()
+    
+    public GameObject[,] PopulateSquares()
     {
-        List<GameObject> pieces = new List<GameObject>();
+        var squares = new GameObject[8,8];
         for (int y = 0; y < 8; y++)
         {
             for (int x = 0; x < 8; x++)
@@ -36,8 +36,15 @@ public class PieceFactory : MonoBehaviour
                 Square square = squareGo.GetComponent<Square>();
                 square.MatrixX = x;
                 square.MatrixY = y;
+
+                squares[x, y] = squareGo;
             }
         }
+        return squares;
+    }
+    public List<GameObject> PopulatePieces()
+    {
+        List<GameObject> pieces = new List<GameObject>();
 
         for (int i = 0; i < 8; i++)
         {

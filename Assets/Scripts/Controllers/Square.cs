@@ -15,6 +15,6 @@ public class Square : MonoBehaviour
 
     private void OnMouseDown()
     {
-        SelectedPieceDelegate?.Invoke(MatrixY, MatrixX);
+        SelectedPieceDelegate?.Invoke(MatrixX, MatrixY);
     }
 }
