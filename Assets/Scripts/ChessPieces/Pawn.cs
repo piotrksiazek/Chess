@@ -20,6 +20,6 @@ public class Pawn : Piece
         {
             possibleMoves.Add(new Coordinates(MatrixX, (MatrixY) + 2 * moveFactor));
         }
-        return BoundaryFiltered(possibleMoves);
+        return BoundaryFilteredAll(possibleMoves);
     }
 }

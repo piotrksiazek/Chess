@@ -6,7 +6,7 @@ public class Rook : Piece
 {
     public override List<Coordinates> GetPossibleMoves()
     {
-        throw new System.NotImplementedException();
+        return BoundaryFilteredAll(CheckHorizontalAndVertical());
     }
 
     // Start is called before the first frame update
