@@ -6,7 +6,7 @@ public class Bishop : Piece
 {
     public override List<Coordinates> GetPossibleMoves()
     {
-        throw new System.NotImplementedException();
+        return CheckDiagonal();
     }
 
     // Start is called before the first frame update
