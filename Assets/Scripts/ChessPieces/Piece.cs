@@ -54,16 +54,42 @@ public abstract class Piece : MonoBehaviour
         {
             moveX = MatrixX + x;
             moveY = MatrixY + x;
+
+            var horizontalMove = new Coordinates(moveX, MatrixY);
+            var verticalMove = new Coordinates(MatrixX, moveY);
             //check horizontal
-            if (IsInBoundaries(new Coordinates(moveX, MatrixY)))
+            if (IsInBoundaries(horizontalMove))
             {
-                possibleMoves.Add(new Coordinates(moveX, MatrixY));
+                possibleMoves.Add(horizontalMove);
             }
             //check vertical
-            if (IsInBoundaries(new Coordinates(MatrixX, moveY)))
+            if (IsInBoundaries(verticalMove))
             {
-                possibleMoves.Add(new Coordinates(MatrixX, moveY));
+                possibleMoves.Add(verticalMove);
             }
+        }
+        return possibleMoves;
+    }
+
+    protected List<Coordinates> CheckDiagonal()
+    {
+        int y = -7;
+        var possibleMoves = new List<Coordinates>();
+        for (int x = -7; x <= 7; x++)
+        {
+            //first diagonal
+            var diagonalMovement = new Coordinates(MatrixX + x, MatrixY + y);
+            if (IsInBoundaries(diagonalMovement))
+            {
+                possibleMoves.Add(diagonalMovement);
+            }
+            //second diagonal
+            diagonalMovement = new Coordinates(MatrixX + x, MatrixY - y);
+            if (IsInBoundaries(diagonalMovement))
+            {
+                possibleMoves.Add(diagonalMovement);
+            }
+            y++;
         }
         return possibleMoves;
     }

@@ -6,7 +6,9 @@ public class Queen : Piece
 {
     public override List<Coordinates> GetPossibleMoves()
     {
-        throw new System.NotImplementedException();
+        var possibleMoves = CheckHorizontalAndVertical();
+        possibleMoves.AddRange(CheckDiagonal());
+        return possibleMoves;
     }
 
     // Start is called before the first frame update
