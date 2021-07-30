@@ -16,6 +16,7 @@ public abstract class Piece : MonoBehaviour
     
     protected bool isFirstMove = false;
 
+    public int MatrixX, Matrixy;
     protected void SayHello()
     {
         print("XDDD");

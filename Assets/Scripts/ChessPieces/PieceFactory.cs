@@ -4,11 +4,68 @@ using UnityEngine;
 using System;
 public class PieceFactory : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject b_pawn = null,
+                       w_pawn = null,
+                       b_rook = null,
+                       w_rook = null,
+                       b_queen = null,
+                       w_queen = null,
+                       b_knight = null,
+                       w_knight = null,
+                       b_king = null,
+                       w_king = null,
+                       b_bishop = null,
+                       w_bishop = null;
+    [SerializeField]
+    private GameObject squarePrefab = null;
+
     private const float _upperLeftCornerX = -3.5f;
     private const float _upperRightCornerY = -_upperLeftCornerX;
 
     private const int _z = -1;
-    public static GameObject Create(GameObject go, int x, int y)
+
+    public  void PopulateChessBoard()
+    {
+        for (int y = 0; y < 8; y++)
+        {
+            for (int x = 0; x < 8; x++)
+            {
+                GameObject squareGo = Instantiate(squarePrefab, TranslateMatrixUnitsToWorldUnits(x, y), Quaternion.identity);
+                Square square = squareGo.GetComponent<Square>();
+                square.MatrixX = x;
+                square.MatrixY = y;
+            }
+        }
+
+        for (int i = 0; i < 8; i++)
+        {
+            Create(b_pawn, i, 1);
+            Create(w_pawn, i, 6);
+        }
+
+        Create(b_king, 4, 0);
+        Create(w_king, 4, 7);
+
+        Create(b_queen, 3, 0);
+        Create(w_queen, 3, 7);
+
+        Create(b_rook, 0, 0);
+        Create(b_rook, 7, 0);
+        Create(w_rook, 0, 7);
+        Create(w_rook, 7, 7);
+
+        Create(b_bishop, 2, 0);
+        Create(b_bishop, 5, 0);
+        Create(w_bishop, 2, 7);
+        Create(w_bishop, 5, 7);
+
+        Create(b_knight, 1, 0);
+        Create(b_knight, 6, 0);
+        Create(w_knight, 1, 7);
+        Create(w_knight, 6, 7);
+    }
+    private GameObject Create(GameObject go, int x, int y)
     {
         Vector3 translatedUnits = TranslateMatrixUnitsToWorldUnits(x, y);
         return Instantiate(go, translatedUnits, Quaternion.identity);
@@ -28,7 +85,7 @@ public class PieceFactory : MonoBehaviour
     /// <param name="matrixX">X coordinate starting from upper left corner</param>
     /// <param name="matrixY">Y coordinate starting from upper left corner</param>
     /// <returns></returns>
-    public static Vector3 TranslateMatrixUnitsToWorldUnits(int matrixX, int matrixY)
+    private Vector3 TranslateMatrixUnitsToWorldUnits(int matrixX, int matrixY)
     {
         float worldX = _upperLeftCornerX + matrixX;
         float worldY = _upperRightCornerY - matrixY;

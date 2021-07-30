@@ -4,37 +4,21 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    //Pieces prefabs
     [SerializeField]
-    private GameObject b_pawn = null,
-                       w_pawn = null,
-                       b_rook = null,
-                       w_rook = null,
-                       b_queen = null,
-                       w_queen = null,
-                       b_knight = null,
-                       w_knight = null,
-                       b_king = null,
-                       w_king = null,
-                       b_bishop = null,
-                       w_bishop = null;
+    private List<GameObject> allPieces;
 
     [SerializeField]
-    private List<GameObject> allPieces; 
+    private GameObject selectedPiece;
 
+    private PieceFactory pieceFactory;
 
-    void Start()
+    private void Awake()
     {
-        PopulatePieces();
+       pieceFactory = FindObjectOfType<PieceFactory>();
     }
 
-    //later put that in PieceFactory
-    void PopulatePieces()
+    private void Start()
     {
-        for (int i = 0; i < 8; i++)
-        {
-            PieceFactory.Create(b_pawn, i, 1);
-            PieceFactory.Create(w_pawn, i, 6);
-        }
+        pieceFactory.PopulateChessBoard();
     }
 }
