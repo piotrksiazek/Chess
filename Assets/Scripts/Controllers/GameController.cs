@@ -137,6 +137,7 @@ public class GameController : MonoBehaviour
             //after all that ...
             ChangePlayerColor();
             possibleMoves.Clear();
+            piece.HasMovedForTheFirstTime();
         }
     }
 
@@ -170,9 +171,6 @@ public class GameController : MonoBehaviour
                                 {
                                     possibleMoves.Remove(currentSquarePosition);
                                 }
-
-                                    
-                               
                             }
                         }
                     }

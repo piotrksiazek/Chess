@@ -17,6 +17,7 @@ public abstract class Piece : MonoBehaviour
     public isColor Color { get => color; }
     
     protected bool isFirstMove = true;
+    public bool IsFirstMove { get; }
 
     public int MatrixX, MatrixY;
 
@@ -96,5 +97,10 @@ public abstract class Piece : MonoBehaviour
     public void Die()
     {
         Destroy(gameObject);
+    }
+
+    public void HasMovedForTheFirstTime()
+    {
+        isFirstMove = false;
     }
 }

@@ -14,11 +14,12 @@ public class Pawn : Piece
 
         if(isFirstMove)
         {
-            possibleMoves.Add( new Coordinates(MatrixX, (MatrixY) + 1 * moveFactor));
+            possibleMoves.Add(new Coordinates(MatrixX, (MatrixY) + 1 * moveFactor));
+            possibleMoves.Add( new Coordinates(MatrixX, (MatrixY) + 2 * moveFactor));
         }
         else
         {
-            possibleMoves.Add(new Coordinates(MatrixX, (MatrixY) + 2 * moveFactor));
+            possibleMoves.Add(new Coordinates(MatrixX, (MatrixY) + 1 * moveFactor));
         }
         return BoundaryFilteredAll(possibleMoves);
     }
