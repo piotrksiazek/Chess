@@ -51,12 +51,19 @@ public class GameController : MonoBehaviour
     private void ClickHandler(int matrixX, int matrixY)
     {
         SetPossibleMovesToColor(Color.white);
-        if(pieceMatrix[matrixX, matrixY] != null)
-            AddSelectedPiece(matrixX, matrixY);
+        if (pieceMatrix[matrixX, matrixY] != null)
+            if (pieceMatrix[matrixX, matrixY].GetComponent<Piece>().Color != playerColor)
+            {
+                MovePieceTo(matrixX, matrixY);
+            }
+            else
+            {
+                AddSelectedPiece(matrixX, matrixY);
+            }
+            
         else
         {
             MovePieceTo(matrixX, matrixY);
-            possibleMoves.Clear();
         }
     }
 
@@ -97,6 +104,13 @@ public class GameController : MonoBehaviour
     {
         if(possibleMoves.Contains(new Coordinates(x, y)))
         {
+            GameObject possibleEnemyGo = pieceMatrix[x, y];
+            if (possibleEnemyGo != null)
+            {
+                Piece possibleEnemy = possibleEnemyGo.GetComponent<Piece>();
+                if (possibleEnemy.Color != playerColor)
+                    possibleEnemy.Die();
+            }
             //phisically move
             selectedPiece.transform.position = PieceFactory.TranslateMatrixUnitsToWorldUnits(x, y);
 
@@ -109,10 +123,10 @@ public class GameController : MonoBehaviour
             piece.MatrixX = x;
             piece.MatrixY = y;
 
+            //after all that ...
             changePlayerColor();
+            possibleMoves.Clear();
         }
-        
-
     }
 
     void changePlayerColor()

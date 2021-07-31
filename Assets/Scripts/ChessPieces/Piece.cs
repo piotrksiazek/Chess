@@ -94,4 +94,8 @@ public abstract class Piece : MonoBehaviour
         return possibleMoves;
     }
 
+    public void Die()
+    {
+        Destroy(gameObject);
+    }
 }
