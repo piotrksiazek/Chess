@@ -33,7 +33,6 @@ public abstract class Piece : MonoBehaviour
             if (!IsInBoundaries(possibleMoves[i]))
             {
                 illegalMoves.Add(possibleMoves[i]);
-                print(possibleMoves[i].X + " : " + possibleMoves[i].Y);
             }
                 
         }

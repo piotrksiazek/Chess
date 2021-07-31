@@ -91,6 +91,7 @@ public class GameController : MonoBehaviour
             selectedPiece = pieceMatrix[matrixX, matrixY];
             possibleMoves = piece.GetPossibleMoves();
             FilterObstacles();
+            DeleteMovesIfIsTheSameColor();
         }
     }
 
@@ -151,15 +152,6 @@ public class GameController : MonoBehaviour
     {
         if(selectedPiece != null)
         {
-            //var directions = new List<Coordinates>() {  new Coordinates(-1, 0),
-            //                                        new Coordinates(1,0),
-            //                                        new Coordinates(0,-1),
-            //                                        new Coordinates(0,1),
-            //                                        new Coordinates(1, -1),
-            //                                        new Coordinates(-1,-1),
-            //                                        new Coordinates(1,1),
-            //                                        new Coordinates(-1,1)};
-
             Piece piece = selectedPiece.GetComponent<Piece>();
             for (int i = 0; i < 8; i++)
             {
@@ -170,33 +162,41 @@ public class GameController : MonoBehaviour
                     {
                         if (pieceMatrix[currentSquarePosition.X, currentSquarePosition.Y])
                         {
-                            for (int k = j + 1; k < 8; k++)
+                            for (int k = j+1; k < 8; k++)
                             {
                                 currentSquarePosition.X = piece.MatrixX + k * directions[i].X;
                                 currentSquarePosition.Y = piece.MatrixY + k * directions[i].Y ;
                                 if (Piece.IsInBoundaries(currentSquarePosition) && (currentSquarePosition.X != piece.MatrixX || (currentSquarePosition.Y != piece.MatrixY)))
-
+                                {
                                     possibleMoves.Remove(currentSquarePosition);
+                                }
+
+                                    
+                               
                             }
                         }
                     }
                 }
             }
-
-
-            //foreach (var move in possibleMoves) //filter out squares with pieces of the same color
-            //{
-            //    Piece currentlyCheckedPiece = pieceMatrix[move.X, move.Y].GetComponent<Piece>();
-            //    if (currentlyCheckedPiece != null)
-            //    {
-            //        if (piece.Color == currentlyCheckedPiece.Color)
-            //        {
-            //            possibleMoves.Remove(move);
-            //        }
-            //    }
-            //}
-
         }
     }
-        
+
+    private void DeleteMovesIfIsTheSameColor()
+    {
+        var illegalMoves = new List<Coordinates>();
+        foreach (var move in possibleMoves)
+        {
+            GameObject consideredPieceGo = pieceMatrix[move.X, move.Y];
+            if(consideredPieceGo)
+            {
+                Piece consideredPiece = consideredPieceGo.GetComponent<Piece>();
+                if(consideredPiece.Color == playerColor)
+                {
+                    illegalMoves.Add(new Coordinates(consideredPiece.MatrixX, consideredPiece.MatrixY));
+                }
+            }
+        }
+
+        illegalMoves.ForEach(illegalMove => possibleMoves.Remove(illegalMove));
+    }
 }
