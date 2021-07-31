@@ -6,6 +6,16 @@ using Chess;
 
 public class GameController : MonoBehaviour
 {
+
+    private List<Coordinates> directions = new List<Coordinates>() {    new Coordinates(-1, 0),
+                                                                        new Coordinates(1,0),
+                                                                        new Coordinates(0,-1),
+                                                                        new Coordinates(0,1),
+                                                                        new Coordinates(1, -1),
+                                                                        new Coordinates(-1,-1),
+                                                                        new Coordinates(1,1),
+                                                                        new Coordinates(-1,1)};
+
     [SerializeField]
     private List<GameObject> allPieces;
 
@@ -14,8 +24,8 @@ public class GameController : MonoBehaviour
 
     private PieceFactory pieceFactory;
 
-    private GameObject[,] pieceMatrix = new GameObject[8,8];
-    private GameObject[,] squareMatrix = new GameObject[8,8];
+    private GameObject[,] pieceMatrix = new GameObject[8, 8];
+    private GameObject[,] squareMatrix = new GameObject[8, 8];
 
 
     [SerializeField]
@@ -60,7 +70,7 @@ public class GameController : MonoBehaviour
             {
                 AddSelectedPiece(matrixX, matrixY);
             }
-            
+
         else
         {
             MovePieceTo(matrixX, matrixY);
@@ -77,16 +87,16 @@ public class GameController : MonoBehaviour
         }
 
         if (piece != null && piece.Color == playerColor)
-            //if (piece != null)
         {
             selectedPiece = pieceMatrix[matrixX, matrixY];
             possibleMoves = piece.GetPossibleMoves();
+            FilterObstacles();
         }
     }
 
     private void HighlightPossibleMoves()
     {
-        foreach(var cord in possibleMoves)
+        foreach (var cord in possibleMoves)
         {
             squareMatrix[cord.X, cord.Y].GetComponent<SpriteRenderer>().color = Color.red;
         }
@@ -102,7 +112,7 @@ public class GameController : MonoBehaviour
 
     private void MovePieceTo(int x, int y)
     {
-        if(possibleMoves.Contains(new Coordinates(x, y)))
+        if (possibleMoves.Contains(new Coordinates(x, y)))
         {
             GameObject possibleEnemyGo = pieceMatrix[x, y];
             if (possibleEnemyGo != null)
@@ -124,16 +134,69 @@ public class GameController : MonoBehaviour
             piece.MatrixY = y;
 
             //after all that ...
-            changePlayerColor();
+            ChangePlayerColor();
             possibleMoves.Clear();
         }
     }
 
-    void changePlayerColor()
+    private void ChangePlayerColor()
     {
         if (playerColor == isColor.White)
             playerColor = isColor.Black;
         else if (playerColor == isColor.Black)
             playerColor = isColor.White;
     }
+
+    private void FilterObstacles()
+    {
+        if(selectedPiece != null)
+        {
+            //var directions = new List<Coordinates>() {  new Coordinates(-1, 0),
+            //                                        new Coordinates(1,0),
+            //                                        new Coordinates(0,-1),
+            //                                        new Coordinates(0,1),
+            //                                        new Coordinates(1, -1),
+            //                                        new Coordinates(-1,-1),
+            //                                        new Coordinates(1,1),
+            //                                        new Coordinates(-1,1)};
+
+            Piece piece = selectedPiece.GetComponent<Piece>();
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    var currentSquarePosition = new Coordinates(piece.MatrixX + j * directions[i].X, piece.MatrixY + j * directions[i].Y);
+                    if (Piece.IsInBoundaries(currentSquarePosition) && (currentSquarePosition.X != piece.MatrixX || (currentSquarePosition.Y != piece.MatrixY)))
+                    {
+                        if (pieceMatrix[currentSquarePosition.X, currentSquarePosition.Y])
+                        {
+                            for (int k = j + 1; k < 8; k++)
+                            {
+                                currentSquarePosition.X = piece.MatrixX + k * directions[i].X;
+                                currentSquarePosition.Y = piece.MatrixY + k * directions[i].Y ;
+                                if (Piece.IsInBoundaries(currentSquarePosition) && (currentSquarePosition.X != piece.MatrixX || (currentSquarePosition.Y != piece.MatrixY)))
+
+                                    possibleMoves.Remove(currentSquarePosition);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            //foreach (var move in possibleMoves) //filter out squares with pieces of the same color
+            //{
+            //    Piece currentlyCheckedPiece = pieceMatrix[move.X, move.Y].GetComponent<Piece>();
+            //    if (currentlyCheckedPiece != null)
+            //    {
+            //        if (piece.Color == currentlyCheckedPiece.Color)
+            //        {
+            //            possibleMoves.Remove(move);
+            //        }
+            //    }
+            //}
+
+        }
+    }
+        
 }

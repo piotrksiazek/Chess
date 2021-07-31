@@ -41,7 +41,7 @@ public abstract class Piece : MonoBehaviour
         return possibleMoves;
     }
 
-    protected bool IsInBoundaries(Coordinates coordinates)
+    public static bool IsInBoundaries(Coordinates coordinates)
     {
         return ((coordinates.X < 8 && coordinates.X >= 0 && coordinates.Y < 8 && coordinates.Y >= 0));
     }
