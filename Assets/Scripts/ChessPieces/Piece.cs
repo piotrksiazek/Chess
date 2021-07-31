@@ -23,6 +23,26 @@ public abstract class Piece : MonoBehaviour
 
     public abstract List<Coordinates> GetPossibleMoves();
 
+    [SerializeField]
+    private Cementary cementary;
+
+    private void Awake()
+    {
+        GetCorrespondingCementary();
+    }
+
+    private void GetCorrespondingCementary()
+    {
+        var cementaries = FindObjectsOfType<Cementary>();
+        foreach(var currentCementary in cementaries)
+        {
+            if(currentCementary.Color == color)
+            {
+                cementary = currentCementary;
+            }
+        }
+    }
+
     protected List<Coordinates> BoundaryFilteredAll(List<Coordinates> possibleMoves)
     {
         var illegalMoves = new List<Coordinates>();

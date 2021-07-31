@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Chess;
 
-public class CementaryController : MonoBehaviour
+public class Cementary : MonoBehaviour
 {
     [SerializeField]
     private GameObject squarePrefab;
@@ -13,7 +13,7 @@ public class CementaryController : MonoBehaviour
 
     [SerializeField]
     private isColor color;
-    public Color Color {get ;}
+    public isColor Color {get => color;}
 
     private GameObject[,] cementaryMatrix;
     private List<GameObject> cementaryList;
@@ -26,10 +26,12 @@ public class CementaryController : MonoBehaviour
     private int panLeft = -3;
 
     private int closestFreeGraveIndex = 0;
+    public int ClosestFreeGraveIndex { get => closestFreeGraveIndex; }
 
     private void Start()
     {
         cementaryMatrix = new GameObject[rowsX, rowsY];
+        cementaryList = new List<GameObject>();
         PopulateCementary();
     }
 
@@ -39,7 +41,6 @@ public class CementaryController : MonoBehaviour
         if (color == isColor.Black)
             moveFactorX = panLeft - howFarFromChessboardX;
 
-        int index = 0;
         for (int y = 0; y < rowsY; y++)
         {
             for (int x = 0; x < rowsX; x++)
@@ -50,9 +51,9 @@ public class CementaryController : MonoBehaviour
                 square.MatrixY = y;
 
                 cementaryMatrix[x, y] = squareGo;
-                cementaryList[index++] = squareGo;
+                cementaryList.Add(squareGo);
 
-                squareGo.GetComponent<SpriteRenderer>().color = Color.green;
+                squareGo.GetComponent<SpriteRenderer>().color = UnityEngine.Color.green;
             }
         }
     }
