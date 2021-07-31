@@ -69,8 +69,8 @@ public class GameController : MonoBehaviour
             piece = pieceGo.transform.GetComponent<Piece>();
         }
 
-        //if (piece != null && piece.Color == playerColor)
-        if (piece != null)
+        if (piece != null && piece.Color == playerColor)
+            //if (piece != null)
         {
             selectedPiece = pieceMatrix[matrixX, matrixY];
             possibleMoves = piece.GetPossibleMoves();
@@ -108,8 +108,18 @@ public class GameController : MonoBehaviour
             //set new properties of a piece
             piece.MatrixX = x;
             piece.MatrixY = y;
+
+            changePlayerColor();
         }
         
 
+    }
+
+    void changePlayerColor()
+    {
+        if (playerColor == isColor.White)
+            playerColor = isColor.Black;
+        else if (playerColor == isColor.Black)
+            playerColor = isColor.White;
     }
 }
