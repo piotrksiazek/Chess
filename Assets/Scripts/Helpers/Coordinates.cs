@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Coordinates
+public struct Coordinates
 {
     public int X, Y;
     public Coordinates(int x, int y)

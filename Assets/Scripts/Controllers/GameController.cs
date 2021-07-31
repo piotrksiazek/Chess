@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour
         pieceFactory = FindObjectOfType<PieceFactory>();
         allPieces = new List<GameObject>();
         possibleMoves = new List<Coordinates>();
-        Square.SelectedPieceDelegate += AddSelectedPiece;
+        Square.SelectedPieceDelegate += ClickHandler;
     }
 
     private void Start()
@@ -46,7 +46,18 @@ public class GameController : MonoBehaviour
     private void Update()
     {
         HighlightPossibleMoves();
-        PrintMoves();
+    }
+
+    private void ClickHandler(int matrixX, int matrixY)
+    {
+        SetPossibleMovesToColor(Color.white);
+        if(pieceMatrix[matrixX, matrixY] != null)
+            AddSelectedPiece(matrixX, matrixY);
+        else
+        {
+            MovePieceTo(matrixX, matrixY);
+            possibleMoves.Clear();
+        }
     }
 
     private void AddSelectedPiece(int matrixX, int matrixY)
@@ -74,12 +85,31 @@ public class GameController : MonoBehaviour
         }
     }
 
-    //delete
-    private void PrintMoves()
+    private void SetPossibleMovesToColor(Color color)
     {
-        foreach(var cord in possibleMoves)
+        foreach (var cord in possibleMoves)
         {
-            
+            squareMatrix[cord.X, cord.Y].GetComponent<SpriteRenderer>().color = color;
         }
+    }
+
+    private void MovePieceTo(int x, int y)
+    {
+        if(possibleMoves.Contains(new Coordinates(x, y)))
+        {
+            //phisically move
+            selectedPiece.transform.position = PieceFactory.TranslateMatrixUnitsToWorldUnits(x, y);
+
+            //set matrix
+            Piece piece = selectedPiece.GetComponent<Piece>();
+            pieceMatrix[x, y] = selectedPiece;
+            pieceMatrix[piece.MatrixX, piece.MatrixY] = null;
+
+            //set new properties of a piece
+            piece.MatrixX = x;
+            piece.MatrixY = y;
+        }
+        
+
     }
 }

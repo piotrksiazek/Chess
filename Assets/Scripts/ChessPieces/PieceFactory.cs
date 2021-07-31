@@ -99,7 +99,7 @@ public class PieceFactory : MonoBehaviour
     /// <param name="matrixX">X coordinate starting from upper left corner</param>
     /// <param name="matrixY">Y coordinate starting from upper left corner</param>
     /// <returns></returns>
-    private Vector3 TranslateMatrixUnitsToWorldUnits(int matrixX, int matrixY)
+    public static Vector3 TranslateMatrixUnitsToWorldUnits(int matrixX, int matrixY)
     {
         float worldX = _upperLeftCornerX + matrixX;
         float worldY = _upperRightCornerY - matrixY;
