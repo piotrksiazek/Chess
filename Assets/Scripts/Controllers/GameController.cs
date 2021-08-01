@@ -33,6 +33,10 @@ public class GameController : MonoBehaviour
 
     [SerializeField]
     private List<Coordinates> possibleMoves;
+    private List<Coordinates> allPossibleMoves;
+
+    [SerializeField]
+    private bool isCheck = false;
 
     private void Awake()
     {
@@ -90,8 +94,7 @@ public class GameController : MonoBehaviour
         {
             selectedPiece = pieceMatrix[matrixX, matrixY];
             possibleMoves = piece.GetPossibleMoves();
-            FilterObstacles();
-            DeleteMovesIfIsTheSameColor();
+            FilterObstacles(selectedPiece, possibleMoves);
         }
     }
 
@@ -149,11 +152,37 @@ public class GameController : MonoBehaviour
             playerColor = isColor.White;
     }
 
-    private void FilterObstacles()
+    private void FilterObstacles(GameObject pieceToFilter, List<Coordinates> movesToFilter)
     {
-        if(selectedPiece != null)
+        //if(selectedPiece != null)
+        //{
+        //    Piece piece = selectedPiece.GetComponent<Piece>();
+        //    for (int i = 0; i < 8; i++)
+        //    {
+        //        for (int j = 0; j < 8; j++)
+        //        {
+        //            var currentSquarePosition = new Coordinates(piece.MatrixX + j * directions[i].X, piece.MatrixY + j * directions[i].Y);
+        //            if (Piece.IsInBoundaries(currentSquarePosition) && (currentSquarePosition.X != piece.MatrixX || (currentSquarePosition.Y != piece.MatrixY)))
+        //            {
+        //                if (pieceMatrix[currentSquarePosition.X, currentSquarePosition.Y])
+        //                {
+        //                    for (int k = j+1; k < 8; k++)
+        //                    {
+        //                        currentSquarePosition.X = piece.MatrixX + k * directions[i].X;
+        //                        currentSquarePosition.Y = piece.MatrixY + k * directions[i].Y ;
+        //                        if (Piece.IsInBoundaries(currentSquarePosition) && (currentSquarePosition.X != piece.MatrixX || (currentSquarePosition.Y != piece.MatrixY)))
+        //                        {
+        //                            possibleMoves.Remove(currentSquarePosition);
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+        if (pieceToFilter != null)
         {
-            Piece piece = selectedPiece.GetComponent<Piece>();
+            Piece piece = pieceToFilter.GetComponent<Piece>();
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
@@ -163,13 +192,13 @@ public class GameController : MonoBehaviour
                     {
                         if (pieceMatrix[currentSquarePosition.X, currentSquarePosition.Y])
                         {
-                            for (int k = j+1; k < 8; k++)
+                            for (int k = j + 1; k < 8; k++)
                             {
                                 currentSquarePosition.X = piece.MatrixX + k * directions[i].X;
-                                currentSquarePosition.Y = piece.MatrixY + k * directions[i].Y ;
+                                currentSquarePosition.Y = piece.MatrixY + k * directions[i].Y;
                                 if (Piece.IsInBoundaries(currentSquarePosition) && (currentSquarePosition.X != piece.MatrixX || (currentSquarePosition.Y != piece.MatrixY)))
                                 {
-                                    possibleMoves.Remove(currentSquarePosition);
+                                    movesToFilter.Remove(currentSquarePosition);
                                 }
                             }
                         }
@@ -177,11 +206,12 @@ public class GameController : MonoBehaviour
                 }
             }
         }
+        DeleteMovesIfIsTheSameColor(movesToFilter);
     }
 
-    private void DeleteMovesIfIsTheSameColor()
+    private void DeleteMovesIfIsTheSameColor(List<Coordinates> movesToFilter)
     {
-        var illegalMoves = new List<Coordinates>();
+        List<Coordinates> illegalMoves = new List<Coordinates>();
         foreach (var move in possibleMoves)
         {
             GameObject consideredPieceGo = pieceMatrix[move.X, move.Y];
@@ -195,6 +225,6 @@ public class GameController : MonoBehaviour
             }
         }
 
-        illegalMoves.ForEach(illegalMove => possibleMoves.Remove(illegalMove));
+        illegalMoves.ForEach(illegalMove => movesToFilter.Remove(illegalMove));
     }
 }

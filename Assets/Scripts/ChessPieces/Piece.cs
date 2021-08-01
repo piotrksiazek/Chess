@@ -116,8 +116,9 @@ public abstract class Piece : MonoBehaviour
     public void Die()
     {
         int graveIndex = cementary.FindNextFreeGraveIndex();
-        transform.position = cementary.cementaryList[graveIndex].transform.position;
-        //Destroy(gameObject);
+        GameObject deadPiece = Instantiate(gameObject);
+        deadPiece.transform.position = cementary.cementaryList[graveIndex].transform.position;
+        Destroy(gameObject); //delete reference in pieceMatrix
     }
 
     public void HasMovedForTheFirstTime()
