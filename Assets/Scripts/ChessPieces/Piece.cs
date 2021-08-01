@@ -23,7 +23,6 @@ public abstract class Piece : MonoBehaviour
 
     public abstract List<Coordinates> GetPossibleMoves();
 
-    [SerializeField]
     private Cementary cementary;
 
     private void Awake()
@@ -116,7 +115,9 @@ public abstract class Piece : MonoBehaviour
 
     public void Die()
     {
-        Destroy(gameObject);
+        int graveIndex = cementary.FindNextFreeGraveIndex();
+        transform.position = cementary.cementaryList[graveIndex].transform.position;
+        //Destroy(gameObject);
     }
 
     public void HasMovedForTheFirstTime()

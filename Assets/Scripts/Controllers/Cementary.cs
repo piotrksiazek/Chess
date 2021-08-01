@@ -16,7 +16,7 @@ public class Cementary : MonoBehaviour
     public isColor Color {get => color;}
 
     private GameObject[,] cementaryMatrix;
-    private List<GameObject> cementaryList;
+    public List<GameObject> cementaryList;
 
     [SerializeField]
     private int howFarFromChessboardX, howFarFromChessboardY;
@@ -25,7 +25,7 @@ public class Cementary : MonoBehaviour
     private int panRight = 8; 
     private int panLeft = -3;
 
-    private int closestFreeGraveIndex = 0;
+    private int closestFreeGraveIndex = -1;
     public int ClosestFreeGraveIndex { get => closestFreeGraveIndex; }
 
     private void Start()
@@ -58,11 +58,12 @@ public class Cementary : MonoBehaviour
         }
     }
 
-    private int FindNextFreeGraveIndex()
+    public int FindNextFreeGraveIndex()
     {
         if(closestFreeGraveIndex < cementaryList.Count)
         {
-            return closestFreeGraveIndex + 1;
+            closestFreeGraveIndex++;
+            return closestFreeGraveIndex;
         }
         return 0;
     }
