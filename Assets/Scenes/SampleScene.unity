@@ -154,6 +154,7 @@ MonoBehaviour:
   rowsX: 3
   rowsY: 6
   color: 1
+  cementaryList: []
   howFarFromChessboardX: 1
   howFarFromChessboardY: 1
 --- !u!4 &54302780
@@ -202,6 +203,90 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &88456281
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1377888700}
+    m_Modifications:
+    - target: {fileID: 2597366532760529781, guid: 1ad83e92bcab84043937bc5e077de684,
+        type: 3}
+      propertyPath: m_Name
+      value: sqaure
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074450201119059288, guid: 1ad83e92bcab84043937bc5e077de684,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074450201119059288, guid: 1ad83e92bcab84043937bc5e077de684,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.009
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074450201119059288, guid: 1ad83e92bcab84043937bc5e077de684,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074450201119059288, guid: 1ad83e92bcab84043937bc5e077de684,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074450201119059288, guid: 1ad83e92bcab84043937bc5e077de684,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074450201119059288, guid: 1ad83e92bcab84043937bc5e077de684,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074450201119059288, guid: 1ad83e92bcab84043937bc5e077de684,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074450201119059288, guid: 1ad83e92bcab84043937bc5e077de684,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074450201119059288, guid: 1ad83e92bcab84043937bc5e077de684,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074450201119059288, guid: 1ad83e92bcab84043937bc5e077de684,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074450201119059288, guid: 1ad83e92bcab84043937bc5e077de684,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074450201119059288, guid: 1ad83e92bcab84043937bc5e077de684,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 9.8213215
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074450201119059288, guid: 1ad83e92bcab84043937bc5e077de684,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 9.8213215
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074450201119059288, guid: 1ad83e92bcab84043937bc5e077de684,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 9.8213215
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1ad83e92bcab84043937bc5e077de684, type: 3}
 --- !u!1 &391161488
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,6 +321,7 @@ MonoBehaviour:
   rowsX: 3
   rowsY: 6
   color: 0
+  cementaryList: []
   howFarFromChessboardX: 1
   howFarFromChessboardY: 1
 --- !u!4 &391161490
@@ -335,6 +421,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &681842332 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1074450201119059288, guid: 1ad83e92bcab84043937bc5e077de684,
+    type: 3}
+  m_PrefabInstance: {fileID: 88456281}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &825582952
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,6 +473,7 @@ MonoBehaviour:
   allPieces: []
   selectedPiece: {fileID: 0}
   playerColor: 1
+  isCheck: 0
 --- !u!1 &1377888698
 GameObject:
   m_ObjectHideFlags: 0
@@ -457,7 +550,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.002, y: 0.009, z: 0}
   m_LocalScale: {x: 1.6956562, y: 1.6944749, z: 1.687556}
-  m_Children: []
+  m_Children:
+  - {fileID: 681842332}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

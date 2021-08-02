@@ -6,18 +6,20 @@ using System.Drawing;
 
 public abstract class Piece : MonoBehaviour
 {
-    [SerializeField] 
+    [SerializeField]
     protected Sprite sprite;
 
     [SerializeField]
     protected PieceName pieceName;
+    public PieceName PieceName {get => pieceName ;}
+
 
     [SerializeField]
     protected isColor color;
     public isColor Color { get => color; }
     
     protected bool isFirstMove = true;
-    public bool IsFirstMove { get; }
+    public bool IsFirstMove { get => isFirstMove; }
 
     public int MatrixX, MatrixY;
 

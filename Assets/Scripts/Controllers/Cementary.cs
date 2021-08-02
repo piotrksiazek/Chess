@@ -53,7 +53,7 @@ public class Cementary : MonoBehaviour
                 cementaryMatrix[x, y] = squareGo;
                 cementaryList.Add(squareGo);
 
-                squareGo.GetComponent<SpriteRenderer>().color = UnityEngine.Color.green;
+                squareGo.GetComponent<SpriteRenderer>().color = UnityEngine.Color.clear;
             }
         }
     }

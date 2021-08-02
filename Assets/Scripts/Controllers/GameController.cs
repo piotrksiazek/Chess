@@ -22,6 +22,9 @@ public class GameController : MonoBehaviour
     [SerializeField]
     private GameObject selectedPiece;
 
+    [SerializeField]
+    private GameObject surroundingSquare;
+
     private PieceFactory pieceFactory;
 
     private GameObject[,] pieceMatrix = new GameObject[8, 8];
@@ -43,6 +46,7 @@ public class GameController : MonoBehaviour
         pieceFactory = FindObjectOfType<PieceFactory>();
         allPieces = new List<GameObject>();
         possibleMoves = new List<Coordinates>();
+        allPossibleMoves = new List<Coordinates>();
         Square.SelectedPieceDelegate += ClickHandler;
     }
 
@@ -64,11 +68,12 @@ public class GameController : MonoBehaviour
 
     private void ClickHandler(int matrixX, int matrixY)
     {
-        SetPossibleMovesToColor(Color.white);
+        //SetPossibleMovesToColor(Color.white);
         if (pieceMatrix[matrixX, matrixY] != null)
             if (pieceMatrix[matrixX, matrixY].GetComponent<Piece>().Color != playerColor)
             {
                 MovePieceTo(matrixX, matrixY);
+                IsCheck();
             }
             else
             {
@@ -78,6 +83,7 @@ public class GameController : MonoBehaviour
         else
         {
             MovePieceTo(matrixX, matrixY);
+            IsCheck();
         }
     }
 
@@ -95,6 +101,8 @@ public class GameController : MonoBehaviour
             selectedPiece = pieceMatrix[matrixX, matrixY];
             possibleMoves = piece.GetPossibleMoves();
             FilterObstacles(selectedPiece, possibleMoves);
+
+            //possibleMoves.ForEach(move => print(selectedPiece.GetComponent<Piece>().name + "  X:" + move.X + "  Y:" + move.Y)); //debug
         }
     }
 
@@ -104,11 +112,16 @@ public class GameController : MonoBehaviour
         {
             squareMatrix[cord.X, cord.Y].GetComponent<SpriteRenderer>().color = Color.red;
         }
+
+        foreach (var cord in allPossibleMoves)
+        {
+            squareMatrix[cord.X, cord.Y].GetComponent<SpriteRenderer>().color = Color.green;
+        }
     }
 
-    private void SetPossibleMovesToColor(Color color)
+    private void SetPossibleMovesToColor(List<Coordinates> moves, Color color)
     {
-        foreach (var cord in possibleMoves)
+        foreach (var cord in moves)
         {
             squareMatrix[cord.X, cord.Y].GetComponent<SpriteRenderer>().color = color;
         }
@@ -141,6 +154,8 @@ public class GameController : MonoBehaviour
             ChangePlayerColor();
             possibleMoves.Clear();
             piece.HasMovedForTheFirstTime();
+
+            GetAllPossibleMoves(); // maybe not here
         }
     }
 
@@ -152,34 +167,26 @@ public class GameController : MonoBehaviour
             playerColor = isColor.White;
     }
 
+    private void GetAllPossibleMoves()
+    {
+        allPossibleMoves.Clear();
+        foreach (GameObject pieceGo in allPieces)
+        {
+            if (pieceGo)
+            {
+                List<Coordinates> currentPossibleMoves;
+                currentPossibleMoves = pieceGo.GetComponent<Piece>().GetPossibleMoves();
+                FilterObstacles(pieceGo, currentPossibleMoves);
+                allPossibleMoves.AddRange(currentPossibleMoves);
+                //print(pieceGo.GetComponent<Piece>().name + ": " + currentPossibleMoves.Count); //degub
+            }
+        }
+        
+
+    }
+
     private void FilterObstacles(GameObject pieceToFilter, List<Coordinates> movesToFilter)
     {
-        //if(selectedPiece != null)
-        //{
-        //    Piece piece = selectedPiece.GetComponent<Piece>();
-        //    for (int i = 0; i < 8; i++)
-        //    {
-        //        for (int j = 0; j < 8; j++)
-        //        {
-        //            var currentSquarePosition = new Coordinates(piece.MatrixX + j * directions[i].X, piece.MatrixY + j * directions[i].Y);
-        //            if (Piece.IsInBoundaries(currentSquarePosition) && (currentSquarePosition.X != piece.MatrixX || (currentSquarePosition.Y != piece.MatrixY)))
-        //            {
-        //                if (pieceMatrix[currentSquarePosition.X, currentSquarePosition.Y])
-        //                {
-        //                    for (int k = j+1; k < 8; k++)
-        //                    {
-        //                        currentSquarePosition.X = piece.MatrixX + k * directions[i].X;
-        //                        currentSquarePosition.Y = piece.MatrixY + k * directions[i].Y ;
-        //                        if (Piece.IsInBoundaries(currentSquarePosition) && (currentSquarePosition.X != piece.MatrixX || (currentSquarePosition.Y != piece.MatrixY)))
-        //                        {
-        //                            possibleMoves.Remove(currentSquarePosition);
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
         if (pieceToFilter != null)
         {
             Piece piece = pieceToFilter.GetComponent<Piece>();
@@ -190,8 +197,12 @@ public class GameController : MonoBehaviour
                     var currentSquarePosition = new Coordinates(piece.MatrixX + j * directions[i].X, piece.MatrixY + j * directions[i].Y);
                     if (Piece.IsInBoundaries(currentSquarePosition) && (currentSquarePosition.X != piece.MatrixX || (currentSquarePosition.Y != piece.MatrixY)))
                     {
+                        
                         if (pieceMatrix[currentSquarePosition.X, currentSquarePosition.Y])
                         {
+                            //Piece consideredPiece = pieceMatrix[currentSquarePosition.X, currentSquarePosition.Y].GetComponent<Piece>();
+                            //if (consideredPiece.Color == piece.Color)
+                            //    movesToFilter.Remove(currentSquarePosition);
                             for (int k = j + 1; k < 8; k++)
                             {
                                 currentSquarePosition.X = piece.MatrixX + k * directions[i].X;
@@ -206,19 +217,20 @@ public class GameController : MonoBehaviour
                 }
             }
         }
-        DeleteMovesIfIsTheSameColor(movesToFilter);
+        DeleteMovesIfIsTheSameColor(pieceToFilter, movesToFilter);
     }
 
-    private void DeleteMovesIfIsTheSameColor(List<Coordinates> movesToFilter)
+    private void DeleteMovesIfIsTheSameColor(GameObject pieceToFilterGo, List<Coordinates> movesToFilter)
     {
         List<Coordinates> illegalMoves = new List<Coordinates>();
-        foreach (var move in possibleMoves)
+        Piece pieceToFilter = pieceToFilterGo.GetComponent<Piece>();
+        foreach (var move in movesToFilter)
         {
             GameObject consideredPieceGo = pieceMatrix[move.X, move.Y];
             if(consideredPieceGo)
             {
                 Piece consideredPiece = consideredPieceGo.GetComponent<Piece>();
-                if(consideredPiece.Color == playerColor)
+                if(consideredPiece.Color == pieceToFilter.Color)
                 {
                     illegalMoves.Add(new Coordinates(consideredPiece.MatrixX, consideredPiece.MatrixY));
                 }
@@ -226,5 +238,26 @@ public class GameController : MonoBehaviour
         }
 
         illegalMoves.ForEach(illegalMove => movesToFilter.Remove(illegalMove));
+    }
+
+    private bool IsCheck()
+    {
+        SpriteRenderer surroundingSquareSr = surroundingSquare.GetComponent<SpriteRenderer>();
+        foreach(var move in allPossibleMoves)
+        {
+            GameObject consideredPieceGo = pieceMatrix[move.X, move.Y];
+            if (consideredPieceGo)
+            {
+                Piece consideredPiece = consideredPieceGo.GetComponent<Piece>();
+                if (consideredPiece.PieceName == PieceName.King)
+                {
+                    print("check");
+                    surroundingSquareSr.color = Color.red;
+                    return true;
+                }
+            }
+        }
+        surroundingSquareSr.color = Color.white;
+        return false;
     }
 }
