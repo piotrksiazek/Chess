@@ -287,6 +287,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ad83e92bcab84043937bc5e077de684, type: 3}
+--- !u!1 &305547080 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2597366532760529781, guid: 1ad83e92bcab84043937bc5e077de684,
+    type: 3}
+  m_PrefabInstance: {fileID: 88456281}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &391161488
 GameObject:
   m_ObjectHideFlags: 0
@@ -472,6 +478,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allPieces: []
   selectedPiece: {fileID: 0}
+  surroundingSquare: {fileID: 305547080}
   playerColor: 1
   isCheck: 0
 --- !u!1 &1377888698

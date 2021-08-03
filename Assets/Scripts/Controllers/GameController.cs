@@ -28,6 +28,7 @@ public class GameController : MonoBehaviour
     private PieceFactory pieceFactory;
 
     private GameObject[,] pieceMatrix = new GameObject[8, 8];
+    public GameObject[,] PieceMatrix { get => pieceMatrix; }
     private GameObject[,] squareMatrix = new GameObject[8, 8];
 
 
@@ -40,6 +41,8 @@ public class GameController : MonoBehaviour
 
     [SerializeField]
     private bool isCheck = false;
+
+    private isColor checkedColor;
 
     private void Awake()
     {
@@ -68,12 +71,11 @@ public class GameController : MonoBehaviour
 
     private void ClickHandler(int matrixX, int matrixY)
     {
-        //SetPossibleMovesToColor(Color.white);
+        SetPossibleMovesToColor(possibleMoves, Color.white);
         if (pieceMatrix[matrixX, matrixY] != null)
             if (pieceMatrix[matrixX, matrixY].GetComponent<Piece>().Color != playerColor)
             {
-                MovePieceTo(matrixX, matrixY);
-                IsCheck();
+                MovePieceToIfNotCheck(matrixX, matrixY);
             }
             else
             {
@@ -82,8 +84,32 @@ public class GameController : MonoBehaviour
 
         else
         {
-            MovePieceTo(matrixX, matrixY);
-            IsCheck();
+            MovePieceToIfNotCheck(matrixX, matrixY);
+        }
+    }
+
+    private void MovePieceToIfNotCheck(int matrixX, int matrixY)
+    {
+        Piece piece = selectedPiece.GetComponent<Piece>();
+        int currentMatrixX = piece.MatrixX;
+        int currentMatrixY = piece.MatrixY;
+
+        MovePieceTo(matrixX, matrixY);
+        if(IsCheck())
+        {
+            if(piece.Color == playerColor)
+            {
+                ChangePlayerColor();
+            }
+            else
+            {
+                MovePieceTo(currentMatrixX, currentMatrixY);
+            }
+
+        }
+        else
+        {
+            ChangePlayerColor();
         }
     }
 
@@ -101,8 +127,6 @@ public class GameController : MonoBehaviour
             selectedPiece = pieceMatrix[matrixX, matrixY];
             possibleMoves = piece.GetPossibleMoves();
             FilterObstacles(selectedPiece, possibleMoves);
-
-            //possibleMoves.ForEach(move => print(selectedPiece.GetComponent<Piece>().name + "  X:" + move.X + "  Y:" + move.Y)); //debug
         }
     }
 
@@ -111,11 +135,6 @@ public class GameController : MonoBehaviour
         foreach (var cord in possibleMoves)
         {
             squareMatrix[cord.X, cord.Y].GetComponent<SpriteRenderer>().color = Color.red;
-        }
-
-        foreach (var cord in allPossibleMoves)
-        {
-            squareMatrix[cord.X, cord.Y].GetComponent<SpriteRenderer>().color = Color.green;
         }
     }
 
@@ -151,11 +170,10 @@ public class GameController : MonoBehaviour
             piece.MatrixY = y;
 
             //after all that ...
-            ChangePlayerColor();
             possibleMoves.Clear();
             piece.HasMovedForTheFirstTime();
 
-            GetAllPossibleMoves(); // maybe not here
+            GetAllPossibleMoves();
         }
     }
 
@@ -178,7 +196,6 @@ public class GameController : MonoBehaviour
                 currentPossibleMoves = pieceGo.GetComponent<Piece>().GetPossibleMoves();
                 FilterObstacles(pieceGo, currentPossibleMoves);
                 allPossibleMoves.AddRange(currentPossibleMoves);
-                //print(pieceGo.GetComponent<Piece>().name + ": " + currentPossibleMoves.Count); //degub
             }
         }
         
@@ -200,9 +217,6 @@ public class GameController : MonoBehaviour
                         
                         if (pieceMatrix[currentSquarePosition.X, currentSquarePosition.Y])
                         {
-                            //Piece consideredPiece = pieceMatrix[currentSquarePosition.X, currentSquarePosition.Y].GetComponent<Piece>();
-                            //if (consideredPiece.Color == piece.Color)
-                            //    movesToFilter.Remove(currentSquarePosition);
                             for (int k = j + 1; k < 8; k++)
                             {
                                 currentSquarePosition.X = piece.MatrixX + k * directions[i].X;
@@ -251,12 +265,14 @@ public class GameController : MonoBehaviour
                 Piece consideredPiece = consideredPieceGo.GetComponent<Piece>();
                 if (consideredPiece.PieceName == PieceName.King)
                 {
-                    print("check");
+                    checkedColor = consideredPiece.Color;
+                    isCheck = true;
                     surroundingSquareSr.color = Color.red;
                     return true;
                 }
             }
         }
+        isCheck = false;
         surroundingSquareSr.color = Color.white;
         return false;
     }
